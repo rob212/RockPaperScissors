@@ -15,14 +15,10 @@ struct ContentView: View {
     @State private var turnCounter = 0
     @State private var showingScore = false
     
-    func buttonPressed(withIndex selection: Int) {
+    func buttonPressed(withIndex selection: Int, usersMove: String) {
         turnCounter += 1
         
-        // Todo: need to add correct scorling logic to construct the winning move given what the bot system is presenting
-        // e.g. Move = paper then scissors is the winning move
-        // Move = rock then paper is the winning move
-        // Move = scissors then rock is the wining move.
-        if shouldWin && selection == currentMove {
+        if (shouldWin && isUserCorrect(userSelection: usersMove)) || (shouldWin == false && !isUserCorrect(userSelection: usersMove)) {
             score += 1
         } else {
             score -= 1
@@ -35,14 +31,27 @@ struct ContentView: View {
         }
     }
     
-    func nextRound() {
-        print("Next Round")
+    private func isUserCorrect(userSelection: String) -> Bool {
+        switch moves[currentMove] {
+        case "👊":
+            return userSelection == "✋"
+        case "✋":
+            return userSelection == "✌️"
+        case "✌️":
+            return userSelection == "👊"
+        default:
+            return false
+        }
+   
+        
+    }
+    
+    private func nextRound() {
         shouldWin.toggle()
         currentMove = Int.random(in: 0..<moves.count)
     }
     
-    func endGame() {
-        print("EndGame called")
+    private func endGame() {
         score = 0
         turnCounter = 0
         showingScore = false
@@ -50,7 +59,6 @@ struct ContentView: View {
     }
     
     var body: some View {
-        
         
         VStack {
             Text("Score: \(score)")
@@ -63,7 +71,7 @@ struct ContentView: View {
             
             ForEach(Array(moves.enumerated()), id: \.element) { index, move in
                 Button(action: {
-                    buttonPressed(withIndex: index)
+                    buttonPressed(withIndex: index, usersMove: move)
                 }) {
                     Text(move)
                         .padding()
@@ -82,6 +90,7 @@ struct ContentView: View {
         } message: {
             Text("Your final score is \(score)")
         }
+        
     }
 }
 
