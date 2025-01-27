@@ -42,8 +42,6 @@ struct ContentView: View {
         default:
             return false
         }
-   
-        
     }
     
     private func nextRound() {
