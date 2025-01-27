@@ -16,10 +16,13 @@ struct ContentView: View {
     @State private var showingScore = false
     
     func buttonPressed(withIndex selection: Int) {
-        print("\(selection) button was tapped, and the current move is index id: \(currentMove)")
         turnCounter += 1
         
-        if selection == currentMove {
+        // Todo: need to add correct scorling logic to construct the winning move given what the bot system is presenting
+        // e.g. Move = paper then scissors is the winning move
+        // Move = rock then paper is the winning move
+        // Move = scissors then rock is the wining move.
+        if shouldWin && selection == currentMove {
             score += 1
         } else {
             score -= 1
